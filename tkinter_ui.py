@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter.colorchooser import askcolor
-
+import subprocess
+import os
+import io
+from PIL import Image,ImageDraw
 
 class Paint(object):
 
@@ -11,24 +14,37 @@ class Paint(object):
     def __init__(self):
         self.root = Tk()
 
-        self.pen_button = Button(self.root, text='pen', width = '10' ,command=self.use_pen)
+        self.pen_button = Button(self.root, text='pen', width = '8' ,command=self.use_pen)
         self.pen_button.grid(row=0, column=0)
 
-        self.color_button = Button(self.root, text='color', width = '10',command=self.choose_color)
+        self.color_button = Button(self.root, text='color', width = '8',command=self.choose_color)
         self.color_button.grid(row=0, column=1)
 
-        self.eraser_button = Button(self.root, text='eraser', width = '10',command=self.use_eraser)
+        self.eraser_button = Button(self.root, text='eraser', width = '8',command=self.use_eraser)
         self.eraser_button.grid(row=0, column=2)
 
-        self.choose_size_button = Scale(self.root, to=10,orient=HORIZONTAL)
-        self.choose_size_button.grid(row=0, column=3)
+        self.save_button = Button(self.root, text='save', width = '8',command=self.get_image)
+        self.save_button.grid(row=0, column=3)
 
-        self.c = Canvas(self.root, bg='white', width=600, height=600)
-        self.c.grid(row=2, columnspan=5)
+        self.reset_button = Button(self.root, text='reset', width='8', command=self.reset_canvas)
+        self.reset_button.grid(row=0,column=4)
+
+        self.choose_size_button = Scale(self.root, to=10,orient=HORIZONTAL)
+        self.choose_size_button.grid(row=0, column=5)
+
+        self.c = Canvas(self.root, bg='white', width=1000, height=600)
+        self.c.grid(row=2, columnspan=6)
 
         self.setup()
         self.root.mainloop()
 
+    # change path!
+    def get_image(self):
+        ps = self.c.postscript(colormode='color')
+        img = Image.open(io.BytesIO(ps.encode('utf-8')))
+        img.save("/Users/shiv/Desktop/test.jpg")
+        # img.show()
+        
     def setup(self):
         self.old_x = None
         self.old_y = None
@@ -69,6 +85,9 @@ class Paint(object):
 
     def reset(self, event):
         self.old_x, self.old_y = None, None
+
+    def reset_canvas(self):
+        self.c.delete("all")
 
 
 if __name__ == '__main__':

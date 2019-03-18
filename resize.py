@@ -5,8 +5,8 @@ import cv2
 # b = cv2.resize(a,(152,96))
 # cv2.imwrite()
 l = []
-path = "/Users/shiv/related_images/data/"
+path = "/Users/shiv/related_images/front_view/"
 for i in os.listdir(path):
 	a = cv2.imread(path+i)
 	b = cv2.resize(a,(152,96))
-	cv2.imwrite("/Users/shiv/related_images/resized_data/"+i+".jpg",b)
+	cv2.imwrite("/Users/shiv/related_images/front/"+i,b)
